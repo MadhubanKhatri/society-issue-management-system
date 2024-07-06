@@ -27,6 +27,16 @@
           </div>
         </div>
       </nav>
+      
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
 
       <!--Signup Modal -->
       <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
@@ -37,44 +47,49 @@
                     <button type="button" class="btn-close btn btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form method="post" action="{% url 'signup' %}">
+                        {% csrf_token %}
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name">
+                            <input type="text" class="form-control" name="name" id="name">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" class="form-control" name="password" id="password">
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone">
+                            <input type="tel" class="form-control" name="phone" id="phone">
                         </div>
                         <div class="form-group">
                             <label for="city">City</label>
-                            <input type="text" class="form-control" id="city">
+                            <input type="text" class="form-control" name="city" id="city">
                         </div>
                         <div class="form-group">
                             <label for="state">State</label>
-                            <input type="text" class="form-control" id="state">
+                            <input type="text" class="form-control" name="state" id="state">
                         </div>
                         <div class="form-group">
                             <label for="address">Address</label>
-                            <textarea class="form-control" id="address" rows="3"></textarea>
+                            <textarea class="form-control" id="address" name="address" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="maritial_status">Maritial Status</label>
-                            <select class="form-control" id="maritial_status">
+                            <select class="form-control" id="maritial_status" name="maritial_status">
                                 <option>Single</option>
                                 <option>Married</option>
                             </select>
                         </div>
-                    </form>
+                        <div class="form-group">
+                            <label for="profession">Profession</label>
+                            <input type="text" class="form-control" name="profession" id="profession">
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Signup</button>
+                    <button type="submit" class="btn btn-primary">Signup</button>
                 </div>
+            </form>
             </div>
         </div>
     </div>
@@ -89,22 +104,23 @@
                   <button type="button" class="btn-close btn btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form method="post">
+                  <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                       <div class="form-group">
                           <label for="user_name">User Name</label>
-                          <input type="text" class="form-control" id="user_name">
+                          <input type="text" class="form-control" name="user_name" id="user_name">
                       </div>
                       <div class="form-group">
                           <label for="password">Password</label>
-                          <input type="password" class="form-control" id="password">
+                          <input type="password" class="form-control" name="password" id="password">
                       </div>
-                  </form>
+                  
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Login</button>
+                  <button type="submit" class="btn btn-primary">Login</button>
               </div>
+            </form>
           </div>
       </div>
   </div>
