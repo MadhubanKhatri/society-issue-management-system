@@ -4,7 +4,12 @@ from .models import Member
 from django.contrib import messages
 
 def home(request):
-    return render(request,'home.html')
+    if('username' in request.session):
+        session_user = request.session['username']
+        member_data = Member.objects.get(name=session_user)
+        return render(request, 'welcome.html', {'session_user': request.session['username'], 'member_data': member_data})
+    else:
+        return render(request,'home.html')
 
 
 def signup(request):    
@@ -16,10 +21,11 @@ def signup(request):
         state = request.POST['state']
         address = request.POST['address']
         profession = request.POST['profession']
-
+        maritial_status = request.POST['maritial_status']
+        
         if(name!='' or password!='' or phone!='' or city!='' or state!='' or address!=''):
             create_member = Member(name=name, password=password, contact_num=phone, city=city, state=state, 
-                                   profession=profession)
+                                   profession=profession,maritial_status=maritial_status)
             create_member.save()
             messages.success(request,"Member is created successfully.")
         else:
@@ -35,10 +41,19 @@ def login(request):
 
         if(user_name!='' or password!=''):
             if Member.objects.filter(name=user_name, password=password).exists():
-                return HttpResponse(f'Your welcome {user_name}.')
+                request.session['username'] = user_name
             else:
                 messages.warning(request,"Invalid username or password.")
-                return redirect('home')
+            return redirect('home')
         else:
             messages.warning(request,"Please fill all the fields.")
             return redirect('home')
+        
+
+def logout(request):
+    if('username' in request.session):
+        request.session.flush()
+        messages.success(request, 'You are logout successfully.')
+    else:
+        messages.warning(request, 'You are not logged in.')
+    return redirect('home')

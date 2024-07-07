@@ -39,7 +39,7 @@ class Member(models.Model):
     address = models.TextField(max_length=100)
     marritial_status = models.CharField(max_length=10)
     profession = models.CharField(max_length=30)
-    family_members = models.TextField(max_length=80)
+    family_members = models.TextField(max_length=80,blank=True, null=True)
     wing = models.OneToOneField(Wing, blank=True, null=True, on_delete=models.CASCADE)
     flat = models.OneToOneField(Flat, blank=True, null=True,on_delete=models.CASCADE)
 

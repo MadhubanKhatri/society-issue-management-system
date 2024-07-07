@@ -19,9 +19,14 @@
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
+            <form class="d-flex" method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
                 <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button>
-                <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                {% if request.session.username %}
+                  <button type="submit" class="btn btn-primary mx-2">Logout</button>
+                {% else %}
+                  <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                {% endif %}
             </form>
 
           </div>

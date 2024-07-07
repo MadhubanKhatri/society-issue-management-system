@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+
+{% block content %}
+<div class="d-flex justify-content-center my-5">
+    <div class="card w-75">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-6">
+                    <h1>Welcome , {{request.session.username}}</h1>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn btn-outline-primary mx-2 float-end" id="raise_issue_btn">
+                        Raise an issue
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">Name:</span> {{member_data.name}}</h5>
+                </div>
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">Profession:</span> {{member_data.profession}}
+                    </h5>
+                </div>
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">City:</span> {{member_data.city}}</h5>
+                </div>
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">State:</span> {{member_data.state}}</h5>
+                </div>
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">Address:</span> {{member_data.address}}</h5>
+                </div>
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">Phone Number:</span> {{member_data.contact_num}}
+                    </h5>
+                </div>
+                <div class="col-4 ">
+                    <h5><span style="color: green; margin-right: 20px;">Maritial Status:</span>
+                        {{member_data.marritial_status}}</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="d-flex justify-content-center d-none" id="issue_form_container">
+    <div class="card w-75 mb-3 ">
+        <div class="card-body">
+            <form method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="heading">Heading for Issue</label>
+                    <input type="text" class="form-control" name="heading" id="heading">
+                </div>
+                <br/>
+                <div class="form-group">
+                    <label for="description">Short description for Issue</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div> 
+                <br/>
+                <div class="d-flex w-100">                    
+                    <button type="submit" class="btn btn-primary w-50 mx-1">Submit</button>
+                    <button type="button" class="btn btn-secondary w-50" id="close_issue_form">Close</button>
+                </div>             
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let raise_issue_btn = document.getElementById('raise_issue_btn');
+    let issue_form_container = document.getElementById('issue_form_container');
+    let close_issue_form = document.getElementById('close_issue_form');
+
+    raise_issue_btn.addEventListener('click', function(){
+        issue_form_container.classList.remove('d-none');
+    })
+
+    close_issue_form.addEventListener('click', function(){
+        issue_form_container.classList.add('d-none');
+    })
+    
+</script>
+{% endblock %}
