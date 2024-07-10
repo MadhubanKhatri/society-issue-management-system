@@ -58,7 +58,7 @@ Welcome
 <div class="d-flex justify-content-center d-none" id="issue_form_container">
     <div class="card w-75 mb-3 ">
         <div class="card-body">
-            <form method="post" action="{% url 'signup' %}">
+            <form method="post" > 
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="heading">Heading for Issue</label>

@@ -16,18 +16,28 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
               </li>
+              {% if not request.session.username and not request.session.admin_user %}
+                <li class="nav-item">
+                  <a class="nav-link btn btn-primary" data-bs-toggle="modal" data-bs-target="#adminPanelModal">Admin Panel</a>
+                </li>
+              {% endif %}
+
             </ul>
-            <form class="d-flex" method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
+            
+            
+              {% if request.session.username %}
+                <a href="{% url 'logout' 'IsUser' %}" class="btn btn-primary mx-2">Logout</a>
+              {% else %}
+                {% if not request.session.admin_user %}
                 <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button>
-                {% if request.session.username %}
-                  <button type="submit" class="btn btn-primary mx-2">Logout</button>
+                <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
                 {% else %}
-                  <button type="button" class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <a href="{% url 'logout' 'IsAdmin' %}" class="btn btn-danger mx-2">Logout</a>
                 {% endif %}
-            </form>
+              {% endif %}
+            
 
           </div>
         </div>
@@ -43,6 +53,36 @@
         {% endif %}
 
 
+        <!-- Admin Panel -->
+        <div class="modal fade" id="adminPanelModal" tabindex="-1" aria-labelledby="adminPanelModal" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content bg-dark text-light">
+                  <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="adminPanelModal">Admin Panel Login</h1>
+                      <button type="button" class="btn-close btn btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <form method="post" action="{% url 'admin_panel_login' %}">
+                          {% csrf_token %}
+                          <div class="form-group">
+                              <label for="admin_name">Admin Username</label>
+                              <input type="text" class="form-control" name="admin_username" id="admin_name">
+                          </div>
+                          <div class="form-group">
+                              <label for="admin_password">Admin Password</label>
+                              <input type="password" class="form-control" name="admin_password" id="admin_password">
+                          </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Login</button>
+                  </div>
+              </form>
+              </div>
+          </div>
+      </div>
+
+      
       <!--Signup Modal -->
       <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
         <div class="modal-dialog">

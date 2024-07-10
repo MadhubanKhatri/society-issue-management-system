@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create Society model
 class Society(models.Model):
@@ -39,6 +40,7 @@ class Member(models.Model):
     address = models.TextField(max_length=100)
     marritial_status = models.CharField(max_length=10)
     profession = models.CharField(max_length=30)
+    isAdmin = models.BooleanField(default=False)
     family_members = models.TextField(max_length=80,blank=True, null=True)
     wing = models.OneToOneField(Wing, blank=True, null=True, on_delete=models.CASCADE)
     flat = models.OneToOneField(Flat, blank=True, null=True,on_delete=models.CASCADE)
@@ -50,9 +52,14 @@ class Member(models.Model):
 
 # Create Issue model
 class Issue(models.Model):
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='issues')
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='member')
     heading = models.CharField(max_length=70, blank=False, null=False)
     description = models.TextField()
+    wing = models.ForeignKey(Wing, on_delete=models.CASCADE, related_name='wing',default=0)
+    flat = models.ForeignKey(Flat, on_delete=models.CASCADE, related_name='flat', default=0)
+    status = models.CharField(max_length=30, blank=True, null=True)
+    pcd = models.DateTimeField(default=timezone.now())
+    prd = models.DateTimeField(default=timezone.now())
 
     def __str__(self):
         return self.member.name+' - '+self.heading
