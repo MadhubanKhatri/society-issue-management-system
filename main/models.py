@@ -27,7 +27,7 @@ class Flat(models.Model):
     wing_name = models.ForeignKey(Wing, on_delete=models.CASCADE, related_name='flat')
 
     def __str__(self):
-        return self.flat_num+' - '+self.wing_name
+        return str(self.flat_num)+' - '+self.wing_name.wing_name
     
 
 # Create Member model

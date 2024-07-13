@@ -71,20 +71,28 @@ def logout(request, flag):
 
 
 
-# def create_issue(request):
-#     if request.method == 'POST':
-#         heading = request.POST['heading']
-#         description = request.POST['description']
+def create_issue(request):
+    if request.method == 'POST':
+        heading = request.POST['heading']
+        description = request.POST['description']
 
-#         session_user = Member.objects.get(name=request.session['username'])
-#         create_new_issue = Issue(member=session_user, heading=heading, description=description, wing=session_user.wing, 
-#                                                 flat=session_user.flat,status='Raised', pcd=timezone.now())
-#         create_new_issue.save()
-#         messages.success(request, 'New issue is raised.')
-#     return redirect('home')
+        session_user = Member.objects.get(name=request.session['username'])
+        
+        create_new_issue = Issue(member=session_user, heading=heading, description=description, wing=session_user.wing, 
+                                                flat=session_user.flat,status='Raised', pcd=timezone.now())
+        create_new_issue.save()
+        messages.success(request, 'New issue is raised.')
+    return redirect('home')
     
+
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    if('admin_user' in request.session):
+        members_issue_details = Issue.objects.all().order_by('-pcd')
+        print(members_issue_details)
+        data = {'member_issues': members_issue_details}
+        return render(request, 'dashboard.html', data)
+    else:
+        return redirect('home')
 
 
 def admin_panel_login(request):
