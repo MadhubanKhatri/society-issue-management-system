@@ -88,7 +88,6 @@ def create_issue(request):
 def dashboard(request):
     if('admin_user' in request.session):
         members_issue_details = Issue.objects.all().order_by('-pcd')
-        print(members_issue_details)
         data = {'member_issues': members_issue_details}
         return render(request, 'dashboard.html', data)
     else:
@@ -110,3 +109,17 @@ def admin_panel_login(request):
         else:
             messages.warning(request,"Please fill all the fields.")
             return redirect('home')
+        
+
+
+
+def edit_issue(request, issue_id):
+    if (request.method == 'POST'):
+        prd = request.POST['prd']
+        issue_status = request.POST['status']
+
+        raised_issue = Issue.objects.get(id=issue_id)
+        raised_issue.prd = prd
+        raised_issue.status = issue_status
+        raised_issue.save()
+    return redirect('home')

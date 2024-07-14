@@ -12,11 +12,12 @@
         <thead>
           <tr class="table-success">
             <th scope="col">#</th>
+            <th scope="col">Edit</th>
             <th scope="col">Name</th>
             <th scope="col">City</th>
             <th scope="col">State</th>
             <th scope="col">Address</th>
-            <th scope="col">Contact Number</th>
+            <th scope="col">Contact Num</th>
             <th scope="col">Maritial Status</th>
             <th scope="col">Wing</th>
             <th scope="col">Flat</th>
@@ -29,7 +30,12 @@
         <tbody>
             {% for item in member_issues %}
                 <tr>
-                    <th scope="row">{{forloop.counter}}</th>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td scope="row" class="d-none">{{item.id}}</td> 
+                    <td>
+                      <i class="bi bi-pencil" data-bs-toggle="modal" data-bs-target="#editIssueModal{{item.id}}"></i>
+                    </td>
+                    
                     <td>{{item.member.name}}</td>
                     <td>{{item.member.city}}</td>
                     <td>{{item.member.state}}</td>
@@ -40,17 +46,113 @@
                     <td>{{item.flat.flat_num}}</td> 
                     <td>{{item.heading}}</td>
                     <td>{{item.pcd}}</td>
-                    <td>{{item.prd}}</td>
+                    <td>
+                      {% if item.status != 'Closed' %}
+                        N/A
+                      {% else %}
+                        {{item.prd}}
+                      {% endif %}
+                    </td>          
+                    <!-- <td>{{item.prd}}</td> -->
                     {% if item.status == 'Raised' %}
                       <td class="text-danger fw-bold">{{item.status}}</td>
                     {% elif item.status == 'Pending' %}
-                      <td class="text-warning fw-bold">{{item.status}}</td>
+                      <td class="text-info fw-bold">{{item.status}}</td>
                     {% else %}
                       <td class="text-success fw-bold">{{item.status}}</td>
                     {% endif %}
                 </tr>
+
+                <!-- Edit Issue Panel -->
+                <div class="modal fade" id="editIssueModal{{item.id}}" tabindex="-1" aria-labelledby="editIssueModal{{item.id}}" aria-hidden="true">
+                  <div class="modal-dialog">
+                      <div class="modal-content bg-dark text-light">
+                          <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="editIssueModal{{item.id}}">Edit Issue</h1>
+                              <button type="button" class="btn-close btn btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <form method="post" action="{% url 'edit_issue' item.id %}">
+                                  {% csrf_token %}
+                                  <div class="form-group">
+                                      <label for="member_name">Name</label>
+                                      <input type="text" class="form-control" value='{{item.member.name}}' name="member_name" 
+                                      id="member_name" disabled>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="issue">Issue</label>
+                                      <input type="text" class="form-control" value="{{item.heading}}" name="issue" id="issue" disabled>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="pcd">Issue Created</label>
+                                    <input type="text" class="form-control" value="{{item.pcd}}" name="pcd" id="pcd" disabled>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="prd">Issue Resolved</label>
+                                    <input type="datetime-local" class="form-control dateInput" name="prd" id="prd">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="prd">Issue Status</label>
+                                    <select class="form-select" aria-label="Default select example" name="status">
+                                      <option
+                                      {% if item.status == 'Raised' %} 
+                                      selected 
+                                      {% endif %}
+                                      value="Raised">Raised</option>
+                                      <option
+                                      {% if item.status == 'Pending' %} 
+                                      selected 
+                                      {% endif %}
+                                       value="Pending">Pending</option>
+                                      <option
+                                      {% if item.status == 'Closed' %} 
+                                      selected 
+                                      {% endif %}
+                                       value="Closed">Closed</option>
+                                    </select>
+                                  </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Update</button>
+                          </div>
+                      </form>
+                      </div>
+                  </div>
+              </div>
           {% endfor %}
         </tbody>
       </table>
     </div>
+
+
+
+    
+
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var dateInput = document.getElementsByClassName('dateInput');
+      var today = new Date().toISOString().split('T')[0];
+
+      for (let index = 0; index < dateInput.length; index++) {
+        const element = dateInput[index];
+        element.setAttribute('min', today);        
+      }
+    
+      var rows = document.querySelectorAll('table tbody tr');  
+      
+      if (rows.length > 1) {
+        var secondRow = rows[1];
+
+        for (let index = 0; index < rows.length; index++) {
+          const row = rows[index];
+          const secondTd = row.querySelectorAll('td')[1];
+        }
+        
+      }
+
+    });
+  </script>
 {% endblock %}
