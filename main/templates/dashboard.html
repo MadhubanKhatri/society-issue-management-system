@@ -33,7 +33,11 @@
                     <td scope="row">{{forloop.counter}}</td>
                     <td scope="row" class="d-none">{{item.id}}</td> 
                     <td>
-                      <i class="bi bi-pencil" data-bs-toggle="modal" data-bs-target="#editIssueModal{{item.id}}"></i>
+                      {% if item.status != 'Closed' %}
+                        <i class="bi bi-pencil" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#editIssueModal{{item.id}}"></i>
+                      {% else %}
+                        <i class="bi bi-pencil" style="cursor: no-drop;"></i>
+                      {% endif %}
                     </td>
                     
                     <td>{{item.member.name}}</td>
@@ -53,7 +57,6 @@
                         {{item.prd}}
                       {% endif %}
                     </td>          
-                    <!-- <td>{{item.prd}}</td> -->
                     {% if item.status == 'Raised' %}
                       <td class="text-danger fw-bold">{{item.status}}</td>
                     {% elif item.status == 'Pending' %}
@@ -83,6 +86,11 @@
                                       <label for="issue">Issue</label>
                                       <input type="text" class="form-control" value="{{item.heading}}" name="issue" id="issue" disabled>
                                   </div>
+                                  <div class="form-group">
+                                    <label for="issue_desc">Issue Description</label>
+                                    <textarea class="form-control" id="issue_desc" id="issue_desc" rows="3" disabled>{{item.description}}
+                                    </textarea>
+                                </div>
                                   <div class="form-group">
                                     <label for="pcd">Issue Created</label>
                                     <input type="text" class="form-control" value="{{item.pcd}}" name="pcd" id="pcd" disabled>
@@ -126,33 +134,4 @@
     </div>
 
 
-
-    
-
-
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var dateInput = document.getElementsByClassName('dateInput');
-      var today = new Date().toISOString().split('T')[0];
-
-      for (let index = 0; index < dateInput.length; index++) {
-        const element = dateInput[index];
-        element.setAttribute('min', today);        
-      }
-    
-      var rows = document.querySelectorAll('table tbody tr');  
-      
-      if (rows.length > 1) {
-        var secondRow = rows[1];
-
-        for (let index = 0; index < rows.length; index++) {
-          const row = rows[index];
-          const secondTd = row.querySelectorAll('td')[1];
-        }
-        
-      }
-
-    });
-  </script>
 {% endblock %}
