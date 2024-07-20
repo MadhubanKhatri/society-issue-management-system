@@ -6,12 +6,7 @@ from django.utils import timezone
 
 def home(request):
     if('username' in request.session):
-        session_user = request.session['username']
-        member_data = Member.objects.get(name=session_user)
-        member_issues = Issue.objects.filter(member=member_data).order_by('-id')
-
-        return render(request, 'welcome.html', {'session_user': request.session['username'], 'member_data': member_data, 
-                                                'member_issues':member_issues})
+        return redirect('member_loggedin')        
     elif('admin_user' in request.session):
         return redirect('dashboard')
     else:
@@ -55,6 +50,15 @@ def login(request):
             messages.warning(request,"Please fill all the fields.")
             return redirect('home')
         
+def member_loggedin(request):
+    session_user = request.session['username']
+    member_data = Member.objects.get(name=session_user)
+    member_issues = Issue.objects.filter(member=member_data).order_by('-id')
+
+    return render(request, 'welcome.html', {'session_user': request.session['username'], 'member_data': member_data, 
+                                            'member_issues':member_issues})
+
+
 
 def logout(request, flag):
     if(flag=='IsAdmin'):
