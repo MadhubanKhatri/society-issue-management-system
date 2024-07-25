@@ -28,7 +28,7 @@
             </ul>
             
             
-              {% if request.session.username %}
+              {% if user.is_authenticated %}
                 <a href="{% url 'logout' 'IsUser' %}" class="btn btn-primary mx-2">Logout</a>
               {% else %}
                 {% if not request.session.admin_user %}

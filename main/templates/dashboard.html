@@ -40,7 +40,7 @@
                       {% endif %}
                     </td>
                     
-                    <td>{{item.member.name}}</td>
+                    <td>{{item.member.username}}</td>
                     <td>{{item.member.city}}</td>
                     <td>{{item.member.state}}</td>
                     <td>{{item.member.address}}</td>
@@ -79,7 +79,7 @@
                                   {% csrf_token %}
                                   <div class="form-group">
                                       <label for="member_name">Name</label>
-                                      <input type="text" class="form-control" value='{{item.member.name}}' name="member_name" 
+                                      <input type="text" class="form-control" value='{{item.member.username}}' name="member_name" 
                                       id="member_name" disabled>
                                   </div>
                                   <div class="form-group">

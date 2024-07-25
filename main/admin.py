@@ -6,3 +6,5 @@ admin.site.register(Wing)
 admin.site.register(Flat)
 admin.site.register(Member)
 admin.site.register(Issue)
+
+admin.site.register(CustomeUser)
